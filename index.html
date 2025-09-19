@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top 200 Drugs Practice</title>
+    <title>Top 200 Drugs Quiz</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,95 +33,88 @@
             text-align: center;
         }
 
-        #flashcard-container {
-            perspective: 1000px;
-            margin: 40px auto;
-        }
-
-        .flashcard {
-            width: 300px;
-            height: 200px;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s;
+        #quiz-container {
+            background-color: #fff;
+            padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        .flashcard.flipped {
-            transform: rotateY(180deg);
+        #question-box {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-weight: bold;
         }
 
-        .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
+        #options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .option-button {
+            padding: 15px;
+            font-size: 1.1em;
             border: 2px solid #007bff;
-            border-radius: 10px;
-            background-color: #fff;
-        }
-
-        .card-back {
-            transform: rotateY(180deg);
-        }
-
-        .controls button {
-            padding: 10px 20px;
-            font-size: 16px;
+            border-radius: 8px;
+            background-color: #f0f8ff;
             cursor: pointer;
-            margin: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s;
         }
 
-        .controls button:hover {
-            background-color: #0056b3;
+        .option-button:hover {
+            background-color: #d1e5ff;
+            transform: translateY(-2px);
+        }
+
+        .option-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .correct {
+            background-color: #28a745;
+            color: white;
+            border-color: #218838;
+        }
+
+        .incorrect {
+            background-color: #dc3545;
+            color: white;
+            border-color: #c82333;
+        }
+
+        #feedback-message {
+            font-size: 1.2em;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        #score-display {
+            font-size: 1.2em;
+            margin-top: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Top 200 Drugs Practice</h1>
+        <h1>Top 200 Drugs Quiz</h1>
     </header>
 
     <main>
-        <section id="flashcards">
-            <h2>Flashcards</h2>
-            <div id="flashcard-container">
-                <div class="flashcard" id="card">
-                    <div class="card-inner">
-                        <div class="card-front">
-                            <h3 id="card-question">Generic Name</h3>
-                        </div>
-                        <div class="card-back">
-                            <h3 id="card-answer">Brand Name</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="controls">
-                <button id="flip-button">Flip Card</button>
-                <button id="next-button">Next Card</button>
-            </div>
-        </section>
+        <div id="quiz-container">
+            <div id="question-box"></div>
+            <div id="options-container"></div>
+            <p id="feedback-message"></p>
+            <button id="next-button" style="display:none;">Next Question</button>
+            <div id="score-display">Score: 0</div>
+        </div>
     </main>
+
     <script>
         const drugs = [
-            // Cardiovascular Drugs 💖
             { generic: "Atorvastatin", brand: "Lipitor" },
             { generic: "Lisinopril", brand: "Prinivil, Zestril" },
             { generic: "Amlodipine", brand: "Norvasc" },
@@ -156,8 +149,6 @@
             { generic: "Propranolol", brand: "Inderal" },
             { generic: "Nifedipine", brand: "Procardia, Adalat" },
             { generic: "Atenolol", brand: "Tenormin" },
-            
-            // Central Nervous System (CNS) Drugs 🧠
             { generic: "Gabapentin", brand: "Neurontin, Gralise" },
             { generic: "Sertraline", brand: "Zoloft" },
             { generic: "Escitalopram", brand: "Lexapro" },
@@ -187,8 +178,6 @@
             { generic: "Lorazepam", brand: "Ativan" },
             { generic: "Amitriptyline", brand: "Elavil" },
             { generic: "Lithium", brand: "Lithobid" },
-            
-            // Endocrine/Metabolic Drugs 🧬
             { generic: "Levothyroxine", brand: "Synthroid, Levoxyl" },
             { generic: "Metformin", brand: "Glucophage" },
             { generic: "Insulin Glargine", brand: "Lantus" },
@@ -208,8 +197,6 @@
             { generic: "Testosterone", brand: "Androgel" },
             { generic: "Sildenafil", brand: "Viagra" },
             { generic: "Tadalafil", brand: "Cialis" },
-            
-            // Antibiotics 🦠
             { generic: "Amoxicillin", brand: "Amoxil" },
             { generic: "Azithromycin", brand: "Z-Pak, Zithromax" },
             { generic: "Ciprofloxacin", brand: "Cipro" },
@@ -228,8 +215,6 @@
             { generic: "Minocycline", brand: "Minocin" },
             { generic: "Linezolid", brand: "Zyvox" },
             { generic: "Vancomycin", brand: "Vancocin" },
-            
-            // Gastrointestinal Drugs 💊
             { generic: "Omeprazole", brand: "Prilosec" },
             { generic: "Pantoprazole", brand: "Protonix" },
             { generic: "Esomeprazole", brand: "Nexium" },
@@ -239,8 +224,6 @@
             { generic: "Ondansetron", brand: "Zofran" },
             { generic: "Loperamide", brand: "Imodium" },
             { generic: "Dicyclomine", brand: "Bentyl" },
-            
-            // Respiratory Drugs 💨
             { generic: "Albuterol", brand: "Ventolin, ProAir" },
             { generic: "Montelukast", brand: "Singulair" },
             { generic: "Fluticasone", brand: "Flonase, Flovent" },
@@ -253,148 +236,127 @@
             { generic: "Cetirizine", brand: "Zyrtec" },
             { generic: "Fexofenadine", brand: "Allegra" },
             { generic: "Diphenhydramine", brand: "Benadryl" },
-            
-            // Pain & Inflammation (NSAIDs) 🤕
             { generic: "Ibuprofen", brand: "Advil, Motrin" },
             { generic: "Naproxen", brand: "Aleve, Naprosyn" },
             { generic: "Meloxicam", brand: "Mobic" },
             { generic: "Diclofenac", brand: "Voltaren" },
             { generic: "Celecoxib", brand: "Celebrex" },
-            
-            // Miscellaneous 
-            { generic: "Allopurinol", brand: "Zyloprim" }, // Gout
-            { generic: "Tamsulosin", brand: "Flomax" }, // Enlarged Prostate
-            { generic: "Potassium Chloride", brand: "K-Dur, Klor-Con" }, // Potassium Supplement
-            { generic: "Ergocalciferol", brand: "Drisdol" }, // Vitamin D
-            { generic: "Folic Acid", brand: "Folacin" }, // Vitamin B9
-            { generic: "Ciprofloxacin/Dexamethasone", brand: "Ciprodex" }, // Otic
-            { generic: "Latanoprost", brand: "Xalatan" }, // Ophthalmic
-            { generic: "Travoprost", brand: "Travatan Z" }, // Ophthalmic
-            { generic: "Finasteride", brand: "Proscar, Propecia" }, // Enlarged Prostate, Hair Loss
-            { generic: "Tizanidine", brand: "Zanaflex" }, // Muscle Relaxant
-            { generic: "Mometasone", brand: "Nasonex" }, // Corticosteroid
-            { generic: "Oxybutynin", brand: "Ditropan" }, // Bladder control
-            { generic: "Tolterodine", brand: "Detrol" }, // Bladder control
-            { generic: "Donepezil", brand: "Aricept" }, // Alzheimer's
-            { generic: "Memantine", brand: "Namenda" }, // Alzheimer's
-            { generic: "Glimepiride", brand: "Amaryl" }, // Diabetes
-            { generic: "Cefdinir", brand: "Omnicef" }, // Antibiotic
-            { generic: "Lurasidone", brand: "Latuda" }, // Antipsychotic
-            { generic: "Hydroxyzine", brand: "Vistaril, Atarax" }, // Antihistamine/Anxiety
-            { generic: "Doxycycline", brand: "Vibramycin" }, // Antibiotic
-            { generic: "Aripiprazole", brand: "Abilify" }, // Antipsychotic
-            { generic: "Buspirone", brand: "Buspar" }, // Anxiety
-            { generic: "Baclofen", brand: "Lioresal" }, // Muscle Relaxant
-            { generic: "Sumatriptan", brand: "Imitrex" }, // Migraine
-            { generic: "Prochlorperazine", brand: "Compazine" }, // Nausea
-            { generic: "Hydroxyzine Pamoate", brand: "Vistaril" }, // Antihistamine
-            { generic: "Hydralazine", brand: "Apresoline" }, // Hypertension
-            { generic: "Meclizine", brand: "Antivert" }, // Vertigo
-            { generic: "Pramipexole", brand: "Mirapex" }, // Parkinson's
-            { generic: "Ropinirole", brand: "Requip" }, // Parkinson's
-            { generic: "Levodopa/Carbidopa", brand: "Sinemet" }, // Parkinson's
-            { generic: "Cyclobenzaprine", brand: "Flexeril" }, // Muscle relaxant
-            { generic: "Tizanidine", brand: "Zanaflex" }, // Muscle relaxant
-            { generic: "Baclofen", brand: "Lioresal" }, // Muscle relaxant
-            { generic: "Metaxalone", brand: "Skelaxin" }, // Muscle relaxant
-            { generic: "Carisoprodol", brand: "Soma" }, // Muscle relaxant
-            { generic: "Methocarbamol", brand: "Robaxin" }, // Muscle relaxant
-            { generic: "Orphenadrine", brand: "Norflex" }, // Muscle relaxant
-            { generic: "Chlorzoxazone", brand: "Parafon Forte" }, // Muscle relaxant
-            { generic: "Thiocolchicoside", brand: "Muscoril" }, // Muscle relaxant
-            { generic: "Phenytoin", brand: "Dilantin" }, // Anticonvulsant
-            { generic: "Oxcarbazepine", brand: "Trileptal" }, // Anticonvulsant
-            { generic: "Clonazepam", brand: "Klonopin" }, // Anticonvulsant
-            { generic: "Lamotrigine", brand: "Lamictal" }, // Anticonvulsant
-            { generic: "Gabapentin", brand: "Neurontin" }, // Anticonvulsant
-            { generic: "Pregabalin", brand: "Lyrica" }, // Anticonvulsant
-            { generic: "Topiramate", brand: "Topamax" }, // Anticonvulsant
-            { generic: "Zonisamide", brand: "Zonegran" }, // Anticonvulsant
-            { generic: "Levetiracetam", brand: "Keppra" }, // Anticonvulsant
-            { generic: "Ethosuximide", brand: "Zarontin" }, // Anticonvulsant
-            { generic: "Valproic Acid", brand: "Depakote" }, // Anticonvulsant
-            { generic: "Carbamazepine", brand: "Tegretol" }, // Anticonvulsant
-            { generic: "Phenobarbital", brand: "Luminal" }, // Anticonvulsant
-            { generic: "Primidone", brand: "Mysoline" }, // Anticonvulsant
-            { generic: "Diazepam", brand: "Valium" }, // Anticonvulsant
-            { generic: "Lorazepam", brand: "Ativan" }, // Anticonvulsant
-            { generic: "Clorazepate", brand: "Tranxene" }, // Anticonvulsant
-            { generic: "Clobazam", brand: "Onfi" }, // Anticonvulsant
-            { generic: "Rufinamide", brand: "Banzel" }, // Anticonvulsant
-            { generic: "Lacosamide", brand: "Vimpat" }, // Anticonvulsant
-            { generic: "Eslicarbazepine", brand: "Aptiom" }, // Anticonvulsant
-            { generic: "Perampanel", brand: "Fycompa" }, // Anticonvulsant
-            { generic: "Brivaracetam", brand: "Briviact" }, // Anticonvulsant
-            { generic: "Cenobamate", brand: "Xcopri" }, // Anticonvulsant
-            { generic: "Fenfluramine", brand: "Fintepla" }, // Anticonvulsant
-            { generic: "Stiripentol", brand: "Diacomit" }, // Anticonvulsant
-            { generic: "Cannabidiol", brand: "Epidiolex" }, // Anticonvulsant
-            { generic: "Everolimus", brand: "Afinitor" }, // Anticonvulsant
-            { generic: "Vigabatrin", brand: "Sabril" }, // Anticonvulsant
-            { generic: "Topiramate", brand: "Topamax" }, // Anticonvulsant
-            { generic: "Zonisamide", brand: "Zonegran" }, // Anticonvulsant
-            { generic: "Eslicarbazepine", brand: "Aptiom" }, // Anticonvulsant
-            { generic: "Clobazam", brand: "Onfi" }, // Anticonvulsant
-            { generic: "Fenfluramine", brand: "Fintepla" }, // Anticonvulsant
-            { generic: "Stiripentol", brand: "Diacomit" }, // Anticonvulsant
-            { generic: "Cannabidiol", brand: "Epidiolex" }, // Anticonvulsant
-            { generic: "Everolimus", brand: "Afinitor" }, // Anticonvulsant
-            { generic: "Vigabatrin", brand: "Sabril" }, // Anticonvulsant
-            { generic: "Phenobarbital", brand: "Luminal" }, // Anticonvulsant
-            { generic: "Primidone", brand: "Mysoline" }, // Anticonvulsant
-            { generic: "Diazepam", brand: "Valium" }, // Anticonvulsant
-            { generic: "Lorazepam", brand: "Ativan" }, // Anticonvulsant
-            { generic: "Clorazepate", brand: "Tranxene" }, // Anticonvulsant
-            { generic: "Clobazam", brand: "Onfi" }, // Anticonvulsant
-            { generic: "Rufinamide", brand: "Banzel" }, // Anticonvulsant
-            { generic: "Lacosamide", brand: "Vimpat" }, // Anticonvulsant
-            { generic: "Eslicarbazepine", brand: "Aptiom" }, // Anticonvulsant
-            { generic: "Perampanel", brand: "Fycompa" }, // Anticonvulsant
-            { generic: "Brivaracetam", brand: "Briviact" }, // Anticonvulsant
-            { generic: "Cenobamate", brand: "Xcopri" }, // Anticonvulsant
-            { generic: "Fenfluramine", brand: "Fintepla" }, // Anticonvulsant
-            { generic: "Stiripentol", brand: "Diacomit" }, // Anticonvulsant
-            { generic: "Cannabidiol", brand: "Epidiolex" }, // Anticonvulsant
-            { generic: "Everolimus", brand: "Afinitor" }, // Anticonvulsant
-            { generic: "Vigabatrin", brand: "Sabril" }, // Anticonvulsant
+            { generic: "Allopurinol", brand: "Zyloprim" },
+            { generic: "Tamsulosin", brand: "Flomax" },
+            { generic: "Potassium Chloride", brand: "K-Dur, Klor-Con" },
+            { generic: "Ergocalciferol", brand: "Drisdol" },
+            { generic: "Folic Acid", brand: "Folacin" },
+            { generic: "Ciprofloxacin/Dexamethasone", brand: "Ciprodex" },
+            { generic: "Latanoprost", brand: "Xalatan" },
+            { generic: "Travoprost", brand: "Travatan Z" },
+            { generic: "Finasteride", brand: "Proscar, Propecia" },
+            { generic: "Mometasone", brand: "Nasonex" },
+            { generic: "Oxybutynin", brand: "Ditropan" },
+            { generic: "Tolterodine", brand: "Detrol" },
+            { generic: "Donepezil", brand: "Aricept" },
+            { generic: "Memantine", brand: "Namenda" },
+            { generic: "Glimepiride", brand: "Amaryl" },
+            { generic: "Lurasidone", brand: "Latuda" },
+            { generic: "Buspirone", brand: "Buspar" },
+            { generic: "Baclofen", brand: "Lioresal" },
+            { generic: "Sumatriptan", brand: "Imitrex" },
+            { generic: "Prochlorperazine", brand: "Compazine" },
+            { generic: "Meclizine", brand: "Antivert" },
+            { generic: "Pramipexole", brand: "Mirapex" },
+            { generic: "Ropinirole", brand: "Requip" },
+            { generic: "Levodopa/Carbidopa", brand: "Sinemet" },
+            { generic: "Cyclobenzaprine", brand: "Flexeril" },
+            { generic: "Metaxalone", brand: "Skelaxin" },
+            { generic: "Carisoprodol", brand: "Soma" },
+            { generic: "Methocarbamol", brand: "Robaxin" },
+            { generic: "Phenytoin", brand: "Dilantin" },
+            { generic: "Oxcarbazepine", brand: "Trileptal" },
+            { generic: "Zonisamide", brand: "Zonegran" }
         ];
 
-        let currentCardIndex = 0;
+        let score = 0;
+        let correctAnswer = null;
+        let isQuestionAnswered = false;
 
-        const cardElement = document.getElementById('card');
-        const questionElement = document.getElementById('card-question');
-        const answerElement = document.getElementById('card-answer');
-        const flipButton = document.getElementById('flip-button');
+        const questionBox = document.getElementById('question-box');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackMessage = document.getElementById('feedback-message');
         const nextButton = document.getElementById('next-button');
+        const scoreDisplay = document.getElementById('score-display');
 
-        // Function to update the flashcard content
-        function updateCard() {
-            cardElement.classList.remove('flipped'); // Reset flip state
-            questionElement.textContent = drugs[currentCardIndex].generic;
-            answerElement.textContent = drugs[currentCardIndex].brand;
-        }
-
-        // Function to shuffle the drug list
-        function shuffle(array) {
+        function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [array[i], array[j]] = [array[j], array[i]];
             }
         }
 
-        // Event Listeners for buttons
-        flipButton.addEventListener('click', () => {
-            cardElement.classList.toggle('flipped');
-        });
+        function generateQuizQuestion() {
+            if (drugs.length < 4) {
+                questionBox.textContent = "Not enough drugs to create a quiz!";
+                optionsContainer.innerHTML = '';
+                return;
+            }
 
-        nextButton.addEventListener('click', () => {
-            currentCardIndex = (currentCardIndex + 1) % drugs.length;
-            updateCard();
-        });
+            isQuestionAnswered = false;
+            feedbackMessage.textContent = '';
+            nextButton.style.display = 'none';
+            optionsContainer.innerHTML = '';
 
-        // Initialize the app
-        shuffle(drugs);
-        updateCard();
+            // Randomly select one drug as the correct answer
+            const correctDrugIndex = Math.floor(Math.random() * drugs.length);
+            correctAnswer = drugs[correctDrugIndex];
+
+            // Get a list of potential wrong answers
+            const incorrectAnswers = drugs.filter(drug => drug !== correctAnswer);
+            shuffleArray(incorrectAnswers);
+
+            // Create a list of 3 incorrect options and 1 correct option
+            const options = [correctAnswer.brand, incorrectAnswers[0].brand, incorrectAnswers[1].brand, incorrectAnswers[2].brand];
+            shuffleArray(options);
+
+            // Display the question
+            questionBox.textContent = `What is the brand name for ${correctAnswer.generic}?`;
+
+            // Create buttons for each option
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('option-button');
+                button.addEventListener('click', () => checkAnswer(button, option));
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedButton, selectedOption) {
+            if (isQuestionAnswered) return;
+            isQuestionAnswered = true;
+
+            const buttons = document.querySelectorAll('.option-button');
+            buttons.forEach(button => {
+                button.disabled = true;
+                if (button.textContent === correctAnswer.brand) {
+                    button.classList.add('correct');
+                } else if (button === selectedButton) {
+                    button.classList.add('incorrect');
+                }
+            });
+
+            if (selectedOption === correctAnswer.brand) {
+                score++;
+                feedbackMessage.textContent = "Correct! ✅";
+            } else {
+                feedbackMessage.textContent = "Incorrect. ❌ The correct answer was: " + correctAnswer.brand;
+            }
+
+            scoreDisplay.textContent = "Score: " + score;
+            nextButton.style.display = 'block';
+        }
+
+        nextButton.addEventListener('click', generateQuizQuestion);
+
+        // Initial question generation
+        generateQuizQuestion();
     </script>
 </body>
 </html>
