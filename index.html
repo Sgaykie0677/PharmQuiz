@@ -1,281 +1,400 @@
-const drugs = [
-    // Cardiovascular Drugs 💖
-    { generic: "Atorvastatin", brand: "Lipitor" },
-    { generic: "Lisinopril", brand: "Prinivil, Zestril" },
-    { generic: "Amlodipine", brand: "Norvasc" },
-    { generic: "Metoprolol", brand: "Lopressor, Toprol XL" },
-    { generic: "Hydrochlorothiazide", brand: "Microzide" },
-    { generic: "Losartan", brand: "Cozaar" },
-    { generic: "Rosuvastatin", brand: "Crestor" },
-    { generic: "Clopidogrel", brand: "Plavix" },
-    { generic: "Valsartan", brand: "Diovan" },
-    { generic: "Carvedilol", brand: "Coreg" },
-    { generic: "Enalapril", brand: "Vasotec" },
-    { generic: "Diltiazem", brand: "Cardizem, Dilacor" },
-    { generic: "Verapamil", brand: "Calan, Isoptin" },
-    { generic: "Furosemide", brand: "Lasix" },
-    { generic: "Spironolactone", brand: "Aldactone" },
-    { generic: "Warfarin", brand: "Coumadin" },
-    { generic: "Apixaban", brand: "Eliquis" },
-    { generic: "Rivaroxaban", brand: "Xarelto" },
-    { generic: "Dabigatran", brand: "Pradaxa" },
-    { generic: "Amiodarone", brand: "Cordarone, Pacerone" },
-    { generic: "Digoxin", brand: "Lanoxin" },
-    { generic: "Nitroglycerin", brand: "Nitrostat, Nitro-Dur" },
-    { generic: "Hydralazine", brand: "Apresoline" },
-    { generic: "Doxazosin", brand: "Cardura" },
-    { generic: "Terazosin", brand: "Hytrin" },
-    { generic: "Clonidine", brand: "Catapres" },
-    { generic: "Ramipril", brand: "Altace" },
-    { generic: "Olmesartan", brand: "Benicar" },
-    { generic: "Irbesartan", brand: "Avapro" },
-    { generic: "Bisoprolol", brand: "Zebeta" },
-    { generic: "Nebivolol", brand: "Bystolic" },
-    { generic: "Propranolol", brand: "Inderal" },
-    { generic: "Nifedipine", brand: "Procardia, Adalat" },
-    { generic: "Atenolol", brand: "Tenormin" },
-    
-    // Central Nervous System (CNS) Drugs 🧠
-    { generic: "Gabapentin", brand: "Neurontin, Gralise" },
-    { generic: "Sertraline", brand: "Zoloft" },
-    { generic: "Escitalopram", brand: "Lexapro" },
-    { generic: "Alprazolam", brand: "Xanax" },
-    { generic: "Trazodone", brand: "Desyrel" },
-    { generic: "Citalopram", brand: "Celexa" },
-    { generic: "Clonazepam", brand: "Klonopin" },
-    { generic: "Zolpidem", brand: "Ambien" },
-    { generic: "Duloxetine", brand: "Cymbalta" },
-    { generic: "Bupropion", brand: "Wellbutrin" },
-    { generic: "Fluoxetine", brand: "Prozac" },
-    { generic: "Venlafaxine", brand: "Effexor XR" },
-    { generic: "Tizanidine", brand: "Zanaflex" },
-    { generic: "Tramadol", brand: "Ultram" },
-    { generic: "Oxycodone/Acetaminophen", brand: "Percocet" },
-    { generic: "Hydrocodone/Acetaminophen", brand: "Norco, Vicodin" },
-    { generic: "Oxycodone", brand: "Roxicodone" },
-    { generic: "Fentanyl", brand: "Duragesic" },
-    { generic: "Mirtazapine", brand: "Remeron" },
-    { generic: "Quetiapine", brand: "Seroquel" },
-    { generic: "Risperidone", brand: "Risperdal" },
-    { generic: "Aripiprazole", brand: "Abilify" },
-    { generic: "Lamotrigine", brand: "Lamictal" },
-    { generic: "Levetiracetam", brand: "Keppra" },
-    { generic: "Topiramate", brand: "Topamax" },
-    { generic: "Diazepam", brand: "Valium" },
-    { generic: "Lorazepam", brand: "Ativan" },
-    { generic: "Amitriptyline", brand: "Elavil" },
-    { generic: "Lithium", brand: "Lithobid" },
-    
-    // Endocrine/Metabolic Drugs 🧬
-    { generic: "Levothyroxine", brand: "Synthroid, Levoxyl" },
-    { generic: "Metformin", brand: "Glucophage" },
-    { generic: "Insulin Glargine", brand: "Lantus" },
-    { generic: "Glipizide", brand: "Glucotrol" },
-    { generic: "Glyburide", brand: "Diabeta" },
-    { generic: "Sitagliptin", brand: "Januvia" },
-    { generic: "Liraglutide", brand: "Victoza, Saxenda" },
-    { generic: "Semaglutide", brand: "Ozempic, Wegovy, Rybelsus" },
-    { generic: "Canagliflozin", brand: "Invokana" },
-    { generic: "Empagliflozin", brand: "Jardiance" },
-    { generic: "Exenatide", brand: "Byetta" },
-    { generic: "Pioglitazone", brand: "Actos" },
-    { generic: "Prednisone", brand: "Deltasone" },
-    { generic: "Methylprednisolone", brand: "Medrol" },
-    { generic: "Dexamethasone", brand: "Decadron" },
-    { generic: "Estrogen", brand: "Premarin" },
-    { generic: "Testosterone", brand: "Androgel" },
-    { generic: "Sildenafil", brand: "Viagra" },
-    { generic: "Tadalafil", brand: "Cialis" },
-    
-    // Antibiotics 🦠
-    { generic: "Amoxicillin", brand: "Amoxil" },
-    { generic: "Azithromycin", brand: "Z-Pak, Zithromax" },
-    { generic: "Ciprofloxacin", brand: "Cipro" },
-    { generic: "Cephalexin", brand: "Keflex" },
-    { generic: "Doxycycline", brand: "Vibramycin" },
-    { generic: "Levofloxacin", brand: "Levaquin" },
-    { generic: "Clindamycin", brand: "Cleocin" },
-    { generic: "Metronidazole", brand: "Flagyl" },
-    { generic: "Sulfamethoxazole/Trimethoprim", brand: "Bactrim, Septra" },
-    { generic: "Cefdinir", brand: "Omnicef" },
-    { generic: "Penicillin", brand: "Veetids" },
-    { generic: "Cefuroxime", brand: "Ceftin" },
-    { generic: "Cefpodoxime", brand: "Vantin" },
-    { generic: "Nitrofurantoin", brand: "Macrobid" },
-    { generic: "Moxifloxacin", brand: "Avelox" },
-    { generic: "Minocycline", brand: "Minocin" },
-    { generic: "Linezolid", brand: "Zyvox" },
-    { generic: "Vancomycin", brand: "Vancocin" },
-    
-    // Gastrointestinal Drugs 💊
-    { generic: "Omeprazole", brand: "Prilosec" },
-    { generic: "Pantoprazole", brand: "Protonix" },
-    { generic: "Esomeprazole", brand: "Nexium" },
-    { generic: "Lansoprazole", brand: "Prevacid" },
-    { generic: "Ranitidine", brand: "Zantac" },
-    { generic: "Famotidine", brand: "Pepcid" },
-    { generic: "Ondansetron", brand: "Zofran" },
-    { generic: "Loperamide", brand: "Imodium" },
-    { generic: "Dicyclomine", brand: "Bentyl" },
-    
-    // Respiratory Drugs 💨
-    { generic: "Albuterol", brand: "Ventolin, ProAir" },
-    { generic: "Montelukast", brand: "Singulair" },
-    { generic: "Fluticasone", brand: "Flonase, Flovent" },
-    { generic: "Budesonide/Formoterol", brand: "Symbicort" },
-    { generic: "Tiotropium", brand: "Spiriva" },
-    { generic: "Salmeterol/Fluticasone", brand: "Advair" },
-    { generic: "Ipratropium", brand: "Atrovent" },
-    { generic: "Hydroxyzine", brand: "Vistaril, Atarax" },
-    { generic: "Loratadine", brand: "Claritin" },
-    { generic: "Cetirizine", brand: "Zyrtec" },
-    { generic: "Fexofenadine", brand: "Allegra" },
-    { generic: "Diphenhydramine", brand: "Benadryl" },
-    
-    // Pain & Inflammation (NSAIDs) 🤕
-    { generic: "Ibuprofen", brand: "Advil, Motrin" },
-    { generic: "Naproxen", brand: "Aleve, Naprosyn" },
-    { generic: "Meloxicam", brand: "Mobic" },
-    { generic: "Diclofenac", brand: "Voltaren" },
-    { generic: "Celecoxib", brand: "Celebrex" },
-    
-    // Miscellaneous 
-    { generic: "Allopurinol", brand: "Zyloprim" }, // Gout
-    { generic: "Tamsulosin", brand: "Flomax" }, // Enlarged Prostate
-    { generic: "Potassium Chloride", brand: "K-Dur, Klor-Con" }, // Potassium Supplement
-    { generic: "Ergocalciferol", brand: "Drisdol" }, // Vitamin D
-    { generic: "Folic Acid", brand: "Folacin" }, // Vitamin B9
-    { generic: "Ciprofloxacin/Dexamethasone", brand: "Ciprodex" }, // Otic
-    { generic: "Latanoprost", brand: "Xalatan" }, // Ophthalmic
-    { generic: "Travoprost", brand: "Travatan Z" }, // Ophthalmic
-    { generic: "Finasteride", brand: "Proscar, Propecia" }, // Enlarged Prostate, Hair Loss
-    { generic: "Tizanidine", brand: "Zanaflex" }, // Muscle Relaxant
-    { generic: "Mometasone", brand: "Nasonex" }, // Corticosteroid
-    { generic: "Oxybutynin", brand: "Ditropan" }, // Bladder control
-    { generic: "Tolterodine", brand: "Detrol" }, // Bladder control
-    { generic: "Donepezil", brand: "Aricept" }, // Alzheimer's
-    { generic: "Memantine", brand: "Namenda" }, // Alzheimer's
-    { generic: "Glimepiride", brand: "Amaryl" }, // Diabetes
-    { generic: "Cefdinir", brand: "Omnicef" }, // Antibiotic
-    { generic: "Lurasidone", brand: "Latuda" }, // Antipsychotic
-    { generic: "Hydroxyzine", brand: "Vistaril, Atarax" }, // Antihistamine/Anxiety
-    { generic: "Doxycycline", brand: "Vibramycin" }, // Antibiotic
-    { generic: "Aripiprazole", brand: "Abilify" }, // Antipsychotic
-    { generic: "Buspirone", brand: "Buspar" }, // Anxiety
-    { generic: "Baclofen", brand: "Lioresal" }, // Muscle Relaxant
-    { generic: "Sumatriptan", brand: "Imitrex" }, // Migraine
-    { generic: "Prochlorperazine", brand: "Compazine" }, // Nausea
-    { generic: "Hydroxyzine Pamoate", brand: "Vistaril" }, // Antihistamine
-    { generic: "Hydralazine", brand: "Apresoline" }, // Hypertension
-    { generic: "Meclizine", brand: "Antivert" }, // Vertigo
-    { generic: "Pramipexole", brand: "Mirapex" }, // Parkinson's
-    { generic: "Ropinirole", brand: "Requip" }, // Parkinson's
-    { generic: "Levodopa/Carbidopa", brand: "Sinemet" }, // Parkinson's
-    { generic: "Cyclobenzaprine", brand: "Flexeril" }, // Muscle relaxant
-    { generic: "Tizanidine", brand: "Zanaflex" }, // Muscle relaxant
-    { generic: "Baclofen", brand: "Lioresal" }, // Muscle relaxant
-    { generic: "Metaxalone", brand: "Skelaxin" }, // Muscle relaxant
-    { generic: "Carisoprodol", brand: "Soma" }, // Muscle relaxant
-    { generic: "Methocarbamol", brand: "Robaxin" }, // Muscle relaxant
-    { generic: "Orphenadrine", brand: "Norflex" }, // Muscle relaxant
-    { generic: "Chlorzoxazone", brand: "Parafon Forte" }, // Muscle relaxant
-    { generic: "Thiocolchicoside", brand: "Muscoril" }, // Muscle relaxant
-    { generic: "Phenytoin", brand: "Dilantin" }, // Anticonvulsant
-    { generic: "Oxcarbazepine", brand: "Trileptal" }, // Anticonvulsant
-    { generic: "Clonazepam", brand: "Klonopin" }, // Anticonvulsant
-    { generic: "Lamotrigine", brand: "Lamictal" }, // Anticonvulsant
-    { generic: "Gabapentin", brand: "Neurontin" }, // Anticonvulsant
-    { generic: "Pregabalin", brand: "Lyrica" }, // Anticonvulsant
-    { generic: "Topiramate", brand: "Topamax" }, // Anticonvulsant
-    { generic: "Zonisamide", brand: "Zonegran" }, // Anticonvulsant
-    { generic: "Levetiracetam", brand: "Keppra" }, // Anticonvulsant
-    { generic: "Ethosuximide", brand: "Zarontin" }, // Anticonvulsant
-    { generic: "Valproic Acid", brand: "Depakote" }, // Anticonvulsant
-    { generic: "Carbamazepine", brand: "Tegretol" }, // Anticonvulsant
-    { generic: "Phenobarbital", brand: "Luminal" }, // Anticonvulsant
-    { generic: "Primidone", brand: "Mysoline" }, // Anticonvulsant
-    { generic: "Diazepam", brand: "Valium" }, // Anticonvulsant
-    { generic: "Lorazepam", brand: "Ativan" }, // Anticonvulsant
-    { generic: "Clorazepate", brand: "Tranxene" }, // Anticonvulsant
-    { generic: "Clobazam", brand: "Onfi" }, // Anticonvulsant
-    { generic: "Rufinamide", brand: "Banzel" }, // Anticonvulsant
-    { generic: "Lacosamide", brand: "Vimpat" }, // Anticonvulsant
-    { generic: "Eslicarbazepine", brand: "Aptiom" }, // Anticonvulsant
-    { generic: "Perampanel", brand: "Fycompa" }, // Anticonvulsant
-    { generic: "Brivaracetam", brand: "Briviact" }, // Anticonvulsant
-    { generic: "Cenobamate", brand: "Xcopri" }, // Anticonvulsant
-    { generic: "Fenfluramine", brand: "Fintepla" }, // Anticonvulsant
-    { generic: "Stiripentol", brand: "Diacomit" }, // Anticonvulsant
-    { generic: "Cannabidiol", brand: "Epidiolex" }, // Anticonvulsant
-    { generic: "Everolimus", brand: "Afinitor" }, // Anticonvulsant
-    { generic: "Vigabatrin", brand: "Sabril" }, // Anticonvulsant
-    { generic: "Topiramate", brand: "Topamax" }, // Anticonvulsant
-    { generic: "Zonisamide", brand: "Zonegran" }, // Anticonvulsant
-    { generic: "Eslicarbazepine", brand: "Aptiom" }, // Anticonvulsant
-    { generic: "Clobazam", brand: "Onfi" }, // Anticonvulsant
-    { generic: "Fenfluramine", brand: "Fintepla" }, // Anticonvulsant
-    { generic: "Stiripentol", brand: "Diacomit" }, // Anticonvulsant
-    { generic: "Cannabidiol", brand: "Epidiolex" }, // Anticonvulsant
-    { generic: "Everolimus", brand: "Afinitor" }, // Anticonvulsant
-    { generic: "Vigabatrin", brand: "Sabril" }, // Anticonvulsant
-    { generic: "Phenobarbital", brand: "Luminal" }, // Anticonvulsant
-    { generic: "Primidone", brand: "Mysoline" }, // Anticonvulsant
-    { generic: "Diazepam", brand: "Valium" }, // Anticonvulsant
-    { generic: "Lorazepam", brand: "Ativan" }, // Anticonvulsant
-    { generic: "Clorazepate", brand: "Tranxene" }, // Anticonvulsant
-    { generic: "Clobazam", brand: "Onfi" }, // Anticonvulsant
-    { generic: "Rufinamide", brand: "Banzel" }, // Anticonvulsant
-    { generic: "Lacosamide", brand: "Vimpat" }, // Anticonvulsant
-    { generic: "Eslicarbazepine", brand: "Aptiom" }, // Anticonvulsant
-    { generic: "Perampanel", brand: "Fycompa" }, // Anticonvulsant
-    { generic: "Brivaracetam", brand: "Briviact" }, // Anticonvulsant
-    { generic: "Cenobamate", brand: "Xcopri" }, // Anticonvulsant
-    { generic: "Fenfluramine", brand: "Fintepla" }, // Anticonvulsant
-    { generic: "Stiripentol", brand: "Diacomit" }, // Anticonvulsant
-    { generic: "Cannabidiol", brand: "Epidiolex" }, // Anticonvulsant
-    { generic: "Everolimus", brand: "Afinitor" }, // Anticonvulsant
-    { generic: "Vigabatrin", brand: "Sabril" }, // Anticonvulsant
-    { generic: "Topiramate", brand: "Topamax" }, // Anticonvulsant
-    { generic: "Zonisamide", brand: "Zonegran" }, // Anticonvulsant
-    { generic: "Eslicarbazepine", brand: "Aptiom" }, // Anticonvulsant
-    { generic: "Clobazam", brand: "Onfi" }, // Anticonvulsant
-    { generic: "Fenfluramine", brand: "Fintepla" }, // Anticonvulsant
-    { generic: "Stiripentol", brand: "Diacomit" }, // Anticonvulsant
-    { generic: "Cannabidiol", brand: "Epidiolex" }, // Anticonvulsant
-    { generic: "Everolimus", brand: "Afinitor" }, // Anticonvulsant
-    { generic: "Vigabatrin", brand: "Sabril" }, // Anticonvulsant
-    { generic: "Phenobarbital", brand: "Luminal" }, // Anticonvulsant
-    { generic: "Primidone", brand: "Mysoline" }, // Anticonvulsant
-    { generic: "Diazepam", brand: "Valium" }, // Anticonvulsant
-    { generic: "Lorazepam", brand: "Ativan" }, // Anticonvulsant
-    { generic: "Clorazepate", brand: "Tranxene" }, // Anticonvulsant
-    { generic: "Clobazam", brand: "Onfi" }, // Anticonvulsant
-    { generic: "Rufinamide", brand: "Banzel" }, // Anticonvulsant
-    { generic: "Lacosamide", brand: "Vimpat" }, // Anticonvulsant
-    { generic: "Eslicarbazepine", brand: "Aptiom" }, // Anticonvulsant
-    { generic: "Perampanel", brand: "Fycompa" }, // Anticonvulsant
-    { generic: "Brivaracetam", brand: "Briviact" }, // Anticonvulsant
-    { generic: "Cenobamate", brand: "Xcopri" }, // Anticonvulsant
-    { generic: "Fenfluramine", brand: "Fintepla" }, // Anticonvulsant
-    { generic: "Stiripentol", brand: "Diacomit" }, // Anticonvulsant
-    { generic: "Cannabidiol", brand: "Epidiolex" }, // Anticonvulsant
-    { generic: "Everolimus", brand: "Afinitor" }, // Anticonvulsant
-    { generic: "Vigabatrin", brand: "Sabril" }, // Anticonvulsant
-    { generic: "Phenobarbital", brand: "Luminal" }, // Anticonvulsant
-    { generic: "Primidone", brand: "Mysoline" }, // Anticonvulsant
-    { generic: "Diazepam", brand: "Valium" }, // Anticonvulsant
-    { generic: "Lorazepam", brand: "Ativan" }, // Anticonvulsant
-    { generic: "Clorazepate", brand: "Tranxene" }, // Anticonvulsant
-    { generic: "Clobazam", brand: "Onfi" }, // Anticonvulsant
-    { generic: "Rufinamide", brand: "Banzel" }, // Anticonvulsant
-    { generic: "Lacosamide", brand: "Vimpat" }, // Anticonvulsant
-    { generic: "Eslicarbazepine", brand: "Aptiom" }, // Anticonvulsant
-    { generic: "Perampanel", brand: "Fycompa" }, // Anticonvulsant
-    { generic: "Brivaracetam", brand: "Briviact" }, // Anticonvulsant
-    { generic: "Cenobamate", brand: "Xcopri" }, // Anticonvulsant
-    { generic: "Fenfluramine", brand: "Fintepla" }, // Anticonvulsant
-    { generic: "Stiripentol", brand: "Diacomit" }, // Anticonvulsant
-    { generic: "Cannabidiol", brand: "Epidiolex" }, // Anticonvulsant
-    { generic: "Everolimus", brand: "Afinitor" }, // Anticonvulsant
-    { generic: "Vigabatrin", brand: "Sabril" }, // Anticonvulsant
-];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top 200 Drugs Practice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        #flashcard-container {
+            perspective: 1000px;
+            margin: 40px auto;
+        }
+
+        .flashcard {
+            width: 300px;
+            height: 200px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        .controls button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .controls button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Top 200 Drugs Practice</h1>
+    </header>
+
+    <main>
+        <section id="flashcards">
+            <h2>Flashcards</h2>
+            <div id="flashcard-container">
+                <div class="flashcard" id="card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <h3 id="card-question">Generic Name</h3>
+                        </div>
+                        <div class="card-back">
+                            <h3 id="card-answer">Brand Name</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="controls">
+                <button id="flip-button">Flip Card</button>
+                <button id="next-button">Next Card</button>
+            </div>
+        </section>
+    </main>
+    <script>
+        const drugs = [
+            // Cardiovascular Drugs 💖
+            { generic: "Atorvastatin", brand: "Lipitor" },
+            { generic: "Lisinopril", brand: "Prinivil, Zestril" },
+            { generic: "Amlodipine", brand: "Norvasc" },
+            { generic: "Metoprolol", brand: "Lopressor, Toprol XL" },
+            { generic: "Hydrochlorothiazide", brand: "Microzide" },
+            { generic: "Losartan", brand: "Cozaar" },
+            { generic: "Rosuvastatin", brand: "Crestor" },
+            { generic: "Clopidogrel", brand: "Plavix" },
+            { generic: "Valsartan", brand: "Diovan" },
+            { generic: "Carvedilol", brand: "Coreg" },
+            { generic: "Enalapril", brand: "Vasotec" },
+            { generic: "Diltiazem", brand: "Cardizem, Dilacor" },
+            { generic: "Verapamil", brand: "Calan, Isoptin" },
+            { generic: "Furosemide", brand: "Lasix" },
+            { generic: "Spironolactone", brand: "Aldactone" },
+            { generic: "Warfarin", brand: "Coumadin" },
+            { generic: "Apixaban", brand: "Eliquis" },
+            { generic: "Rivaroxaban", brand: "Xarelto" },
+            { generic: "Dabigatran", brand: "Pradaxa" },
+            { generic: "Amiodarone", brand: "Cordarone, Pacerone" },
+            { generic: "Digoxin", brand: "Lanoxin" },
+            { generic: "Nitroglycerin", brand: "Nitrostat, Nitro-Dur" },
+            { generic: "Hydralazine", brand: "Apresoline" },
+            { generic: "Doxazosin", brand: "Cardura" },
+            { generic: "Terazosin", brand: "Hytrin" },
+            { generic: "Clonidine", brand: "Catapres" },
+            { generic: "Ramipril", brand: "Altace" },
+            { generic: "Olmesartan", brand: "Benicar" },
+            { generic: "Irbesartan", brand: "Avapro" },
+            { generic: "Bisoprolol", brand: "Zebeta" },
+            { generic: "Nebivolol", brand: "Bystolic" },
+            { generic: "Propranolol", brand: "Inderal" },
+            { generic: "Nifedipine", brand: "Procardia, Adalat" },
+            { generic: "Atenolol", brand: "Tenormin" },
+            
+            // Central Nervous System (CNS) Drugs 🧠
+            { generic: "Gabapentin", brand: "Neurontin, Gralise" },
+            { generic: "Sertraline", brand: "Zoloft" },
+            { generic: "Escitalopram", brand: "Lexapro" },
+            { generic: "Alprazolam", brand: "Xanax" },
+            { generic: "Trazodone", brand: "Desyrel" },
+            { generic: "Citalopram", brand: "Celexa" },
+            { generic: "Clonazepam", brand: "Klonopin" },
+            { generic: "Zolpidem", brand: "Ambien" },
+            { generic: "Duloxetine", brand: "Cymbalta" },
+            { generic: "Bupropion", brand: "Wellbutrin" },
+            { generic: "Fluoxetine", brand: "Prozac" },
+            { generic: "Venlafaxine", brand: "Effexor XR" },
+            { generic: "Tizanidine", brand: "Zanaflex" },
+            { generic: "Tramadol", brand: "Ultram" },
+            { generic: "Oxycodone/Acetaminophen", brand: "Percocet" },
+            { generic: "Hydrocodone/Acetaminophen", brand: "Norco, Vicodin" },
+            { generic: "Oxycodone", brand: "Roxicodone" },
+            { generic: "Fentanyl", brand: "Duragesic" },
+            { generic: "Mirtazapine", brand: "Remeron" },
+            { generic: "Quetiapine", brand: "Seroquel" },
+            { generic: "Risperidone", brand: "Risperdal" },
+            { generic: "Aripiprazole", brand: "Abilify" },
+            { generic: "Lamotrigine", brand: "Lamictal" },
+            { generic: "Levetiracetam", brand: "Keppra" },
+            { generic: "Topiramate", brand: "Topamax" },
+            { generic: "Diazepam", brand: "Valium" },
+            { generic: "Lorazepam", brand: "Ativan" },
+            { generic: "Amitriptyline", brand: "Elavil" },
+            { generic: "Lithium", brand: "Lithobid" },
+            
+            // Endocrine/Metabolic Drugs 🧬
+            { generic: "Levothyroxine", brand: "Synthroid, Levoxyl" },
+            { generic: "Metformin", brand: "Glucophage" },
+            { generic: "Insulin Glargine", brand: "Lantus" },
+            { generic: "Glipizide", brand: "Glucotrol" },
+            { generic: "Glyburide", brand: "Diabeta" },
+            { generic: "Sitagliptin", brand: "Januvia" },
+            { generic: "Liraglutide", brand: "Victoza, Saxenda" },
+            { generic: "Semaglutide", brand: "Ozempic, Wegovy, Rybelsus" },
+            { generic: "Canagliflozin", brand: "Invokana" },
+            { generic: "Empagliflozin", brand: "Jardiance" },
+            { generic: "Exenatide", brand: "Byetta" },
+            { generic: "Pioglitazone", brand: "Actos" },
+            { generic: "Prednisone", brand: "Deltasone" },
+            { generic: "Methylprednisolone", brand: "Medrol" },
+            { generic: "Dexamethasone", brand: "Decadron" },
+            { generic: "Estrogen", brand: "Premarin" },
+            { generic: "Testosterone", brand: "Androgel" },
+            { generic: "Sildenafil", brand: "Viagra" },
+            { generic: "Tadalafil", brand: "Cialis" },
+            
+            // Antibiotics 🦠
+            { generic: "Amoxicillin", brand: "Amoxil" },
+            { generic: "Azithromycin", brand: "Z-Pak, Zithromax" },
+            { generic: "Ciprofloxacin", brand: "Cipro" },
+            { generic: "Cephalexin", brand: "Keflex" },
+            { generic: "Doxycycline", brand: "Vibramycin" },
+            { generic: "Levofloxacin", brand: "Levaquin" },
+            { generic: "Clindamycin", brand: "Cleocin" },
+            { generic: "Metronidazole", brand: "Flagyl" },
+            { generic: "Sulfamethoxazole/Trimethoprim", brand: "Bactrim, Septra" },
+            { generic: "Cefdinir", brand: "Omnicef" },
+            { generic: "Penicillin", brand: "Veetids" },
+            { generic: "Cefuroxime", brand: "Ceftin" },
+            { generic: "Cefpodoxime", brand: "Vantin" },
+            { generic: "Nitrofurantoin", brand: "Macrobid" },
+            { generic: "Moxifloxacin", brand: "Avelox" },
+            { generic: "Minocycline", brand: "Minocin" },
+            { generic: "Linezolid", brand: "Zyvox" },
+            { generic: "Vancomycin", brand: "Vancocin" },
+            
+            // Gastrointestinal Drugs 💊
+            { generic: "Omeprazole", brand: "Prilosec" },
+            { generic: "Pantoprazole", brand: "Protonix" },
+            { generic: "Esomeprazole", brand: "Nexium" },
+            { generic: "Lansoprazole", brand: "Prevacid" },
+            { generic: "Ranitidine", brand: "Zantac" },
+            { generic: "Famotidine", brand: "Pepcid" },
+            { generic: "Ondansetron", brand: "Zofran" },
+            { generic: "Loperamide", brand: "Imodium" },
+            { generic: "Dicyclomine", brand: "Bentyl" },
+            
+            // Respiratory Drugs 💨
+            { generic: "Albuterol", brand: "Ventolin, ProAir" },
+            { generic: "Montelukast", brand: "Singulair" },
+            { generic: "Fluticasone", brand: "Flonase, Flovent" },
+            { generic: "Budesonide/Formoterol", brand: "Symbicort" },
+            { generic: "Tiotropium", brand: "Spiriva" },
+            { generic: "Salmeterol/Fluticasone", brand: "Advair" },
+            { generic: "Ipratropium", brand: "Atrovent" },
+            { generic: "Hydroxyzine", brand: "Vistaril, Atarax" },
+            { generic: "Loratadine", brand: "Claritin" },
+            { generic: "Cetirizine", brand: "Zyrtec" },
+            { generic: "Fexofenadine", brand: "Allegra" },
+            { generic: "Diphenhydramine", brand: "Benadryl" },
+            
+            // Pain & Inflammation (NSAIDs) 🤕
+            { generic: "Ibuprofen", brand: "Advil, Motrin" },
+            { generic: "Naproxen", brand: "Aleve, Naprosyn" },
+            { generic: "Meloxicam", brand: "Mobic" },
+            { generic: "Diclofenac", brand: "Voltaren" },
+            { generic: "Celecoxib", brand: "Celebrex" },
+            
+            // Miscellaneous 
+            { generic: "Allopurinol", brand: "Zyloprim" }, // Gout
+            { generic: "Tamsulosin", brand: "Flomax" }, // Enlarged Prostate
+            { generic: "Potassium Chloride", brand: "K-Dur, Klor-Con" }, // Potassium Supplement
+            { generic: "Ergocalciferol", brand: "Drisdol" }, // Vitamin D
+            { generic: "Folic Acid", brand: "Folacin" }, // Vitamin B9
+            { generic: "Ciprofloxacin/Dexamethasone", brand: "Ciprodex" }, // Otic
+            { generic: "Latanoprost", brand: "Xalatan" }, // Ophthalmic
+            { generic: "Travoprost", brand: "Travatan Z" }, // Ophthalmic
+            { generic: "Finasteride", brand: "Proscar, Propecia" }, // Enlarged Prostate, Hair Loss
+            { generic: "Tizanidine", brand: "Zanaflex" }, // Muscle Relaxant
+            { generic: "Mometasone", brand: "Nasonex" }, // Corticosteroid
+            { generic: "Oxybutynin", brand: "Ditropan" }, // Bladder control
+            { generic: "Tolterodine", brand: "Detrol" }, // Bladder control
+            { generic: "Donepezil", brand: "Aricept" }, // Alzheimer's
+            { generic: "Memantine", brand: "Namenda" }, // Alzheimer's
+            { generic: "Glimepiride", brand: "Amaryl" }, // Diabetes
+            { generic: "Cefdinir", brand: "Omnicef" }, // Antibiotic
+            { generic: "Lurasidone", brand: "Latuda" }, // Antipsychotic
+            { generic: "Hydroxyzine", brand: "Vistaril, Atarax" }, // Antihistamine/Anxiety
+            { generic: "Doxycycline", brand: "Vibramycin" }, // Antibiotic
+            { generic: "Aripiprazole", brand: "Abilify" }, // Antipsychotic
+            { generic: "Buspirone", brand: "Buspar" }, // Anxiety
+            { generic: "Baclofen", brand: "Lioresal" }, // Muscle Relaxant
+            { generic: "Sumatriptan", brand: "Imitrex" }, // Migraine
+            { generic: "Prochlorperazine", brand: "Compazine" }, // Nausea
+            { generic: "Hydroxyzine Pamoate", brand: "Vistaril" }, // Antihistamine
+            { generic: "Hydralazine", brand: "Apresoline" }, // Hypertension
+            { generic: "Meclizine", brand: "Antivert" }, // Vertigo
+            { generic: "Pramipexole", brand: "Mirapex" }, // Parkinson's
+            { generic: "Ropinirole", brand: "Requip" }, // Parkinson's
+            { generic: "Levodopa/Carbidopa", brand: "Sinemet" }, // Parkinson's
+            { generic: "Cyclobenzaprine", brand: "Flexeril" }, // Muscle relaxant
+            { generic: "Tizanidine", brand: "Zanaflex" }, // Muscle relaxant
+            { generic: "Baclofen", brand: "Lioresal" }, // Muscle relaxant
+            { generic: "Metaxalone", brand: "Skelaxin" }, // Muscle relaxant
+            { generic: "Carisoprodol", brand: "Soma" }, // Muscle relaxant
+            { generic: "Methocarbamol", brand: "Robaxin" }, // Muscle relaxant
+            { generic: "Orphenadrine", brand: "Norflex" }, // Muscle relaxant
+            { generic: "Chlorzoxazone", brand: "Parafon Forte" }, // Muscle relaxant
+            { generic: "Thiocolchicoside", brand: "Muscoril" }, // Muscle relaxant
+            { generic: "Phenytoin", brand: "Dilantin" }, // Anticonvulsant
+            { generic: "Oxcarbazepine", brand: "Trileptal" }, // Anticonvulsant
+            { generic: "Clonazepam", brand: "Klonopin" }, // Anticonvulsant
+            { generic: "Lamotrigine", brand: "Lamictal" }, // Anticonvulsant
+            { generic: "Gabapentin", brand: "Neurontin" }, // Anticonvulsant
+            { generic: "Pregabalin", brand: "Lyrica" }, // Anticonvulsant
+            { generic: "Topiramate", brand: "Topamax" }, // Anticonvulsant
+            { generic: "Zonisamide", brand: "Zonegran" }, // Anticonvulsant
+            { generic: "Levetiracetam", brand: "Keppra" }, // Anticonvulsant
+            { generic: "Ethosuximide", brand: "Zarontin" }, // Anticonvulsant
+            { generic: "Valproic Acid", brand: "Depakote" }, // Anticonvulsant
+            { generic: "Carbamazepine", brand: "Tegretol" }, // Anticonvulsant
+            { generic: "Phenobarbital", brand: "Luminal" }, // Anticonvulsant
+            { generic: "Primidone", brand: "Mysoline" }, // Anticonvulsant
+            { generic: "Diazepam", brand: "Valium" }, // Anticonvulsant
+            { generic: "Lorazepam", brand: "Ativan" }, // Anticonvulsant
+            { generic: "Clorazepate", brand: "Tranxene" }, // Anticonvulsant
+            { generic: "Clobazam", brand: "Onfi" }, // Anticonvulsant
+            { generic: "Rufinamide", brand: "Banzel" }, // Anticonvulsant
+            { generic: "Lacosamide", brand: "Vimpat" }, // Anticonvulsant
+            { generic: "Eslicarbazepine", brand: "Aptiom" }, // Anticonvulsant
+            { generic: "Perampanel", brand: "Fycompa" }, // Anticonvulsant
+            { generic: "Brivaracetam", brand: "Briviact" }, // Anticonvulsant
+            { generic: "Cenobamate", brand: "Xcopri" }, // Anticonvulsant
+            { generic: "Fenfluramine", brand: "Fintepla" }, // Anticonvulsant
+            { generic: "Stiripentol", brand: "Diacomit" }, // Anticonvulsant
+            { generic: "Cannabidiol", brand: "Epidiolex" }, // Anticonvulsant
+            { generic: "Everolimus", brand: "Afinitor" }, // Anticonvulsant
+            { generic: "Vigabatrin", brand: "Sabril" }, // Anticonvulsant
+            { generic: "Topiramate", brand: "Topamax" }, // Anticonvulsant
+            { generic: "Zonisamide", brand: "Zonegran" }, // Anticonvulsant
+            { generic: "Eslicarbazepine", brand: "Aptiom" }, // Anticonvulsant
+            { generic: "Clobazam", brand: "Onfi" }, // Anticonvulsant
+            { generic: "Fenfluramine", brand: "Fintepla" }, // Anticonvulsant
+            { generic: "Stiripentol", brand: "Diacomit" }, // Anticonvulsant
+            { generic: "Cannabidiol", brand: "Epidiolex" }, // Anticonvulsant
+            { generic: "Everolimus", brand: "Afinitor" }, // Anticonvulsant
+            { generic: "Vigabatrin", brand: "Sabril" }, // Anticonvulsant
+            { generic: "Phenobarbital", brand: "Luminal" }, // Anticonvulsant
+            { generic: "Primidone", brand: "Mysoline" }, // Anticonvulsant
+            { generic: "Diazepam", brand: "Valium" }, // Anticonvulsant
+            { generic: "Lorazepam", brand: "Ativan" }, // Anticonvulsant
+            { generic: "Clorazepate", brand: "Tranxene" }, // Anticonvulsant
+            { generic: "Clobazam", brand: "Onfi" }, // Anticonvulsant
+            { generic: "Rufinamide", brand: "Banzel" }, // Anticonvulsant
+            { generic: "Lacosamide", brand: "Vimpat" }, // Anticonvulsant
+            { generic: "Eslicarbazepine", brand: "Aptiom" }, // Anticonvulsant
+            { generic: "Perampanel", brand: "Fycompa" }, // Anticonvulsant
+            { generic: "Brivaracetam", brand: "Briviact" }, // Anticonvulsant
+            { generic: "Cenobamate", brand: "Xcopri" }, // Anticonvulsant
+            { generic: "Fenfluramine", brand: "Fintepla" }, // Anticonvulsant
+            { generic: "Stiripentol", brand: "Diacomit" }, // Anticonvulsant
+            { generic: "Cannabidiol", brand: "Epidiolex" }, // Anticonvulsant
+            { generic: "Everolimus", brand: "Afinitor" }, // Anticonvulsant
+            { generic: "Vigabatrin", brand: "Sabril" }, // Anticonvulsant
+        ];
+
+        let currentCardIndex = 0;
+
+        const cardElement = document.getElementById('card');
+        const questionElement = document.getElementById('card-question');
+        const answerElement = document.getElementById('card-answer');
+        const flipButton = document.getElementById('flip-button');
+        const nextButton = document.getElementById('next-button');
+
+        // Function to update the flashcard content
+        function updateCard() {
+            cardElement.classList.remove('flipped'); // Reset flip state
+            questionElement.textContent = drugs[currentCardIndex].generic;
+            answerElement.textContent = drugs[currentCardIndex].brand;
+        }
+
+        // Function to shuffle the drug list
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Event Listeners for buttons
+        flipButton.addEventListener('click', () => {
+            cardElement.classList.toggle('flipped');
+        });
+
+        nextButton.addEventListener('click', () => {
+            currentCardIndex = (currentCardIndex + 1) % drugs.length;
+            updateCard();
+        });
+
+        // Initialize the app
+        shuffle(drugs);
+        updateCard();
+    </script>
+</body>
+</html>
