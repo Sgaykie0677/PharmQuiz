@@ -33,11 +33,15 @@
             text-align: center;
         }
 
-        #quiz-container {
+        #quiz-container, #review-container {
             background-color: #fff;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        #review-container {
+            display: none; /* Hidden by default */
         }
 
         #question-box {
@@ -96,6 +100,19 @@
             margin-top: 20px;
             font-weight: bold;
         }
+
+        .review-list-item {
+            font-size: 1.1em;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #e9ecef;
+            text-align: left;
+        }
+        
+        .review-list-item strong {
+            color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -109,7 +126,14 @@
             <div id="options-container"></div>
             <p id="feedback-message"></p>
             <button id="next-button" style="display:none;">Next Question</button>
-            <div id="score-display">Score: 0</div>
+            <div id="score-display">Correct: 0 | Incorrect: 0</div>
+            <button id="review-button" style="display:none; margin-top: 20px;">Review Missed Questions</button>
+        </div>
+
+        <div id="review-container">
+            <h2>Missed Questions</h2>
+            <ul id="missed-list"></ul>
+            <button id="back-to-quiz-button">Back to Quiz</button>
         </div>
     </main>
 
@@ -274,15 +298,22 @@
             { generic: "Zonisamide", brand: "Zonegran" }
         ];
 
-        let score = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        let missedDrugs = [];
         let correctAnswer = null;
         let isQuestionAnswered = false;
 
+        const quizContainer = document.getElementById('quiz-container');
+        const reviewContainer = document.getElementById('review-container');
         const questionBox = document.getElementById('question-box');
         const optionsContainer = document.getElementById('options-container');
         const feedbackMessage = document.getElementById('feedback-message');
         const nextButton = document.getElementById('next-button');
         const scoreDisplay = document.getElementById('score-display');
+        const reviewButton = document.getElementById('review-button');
+        const backToQuizButton = document.getElementById('back-to-quiz-button');
+        const missedList = document.getElementById('missed-list');
 
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
@@ -303,22 +334,17 @@
             nextButton.style.display = 'none';
             optionsContainer.innerHTML = '';
 
-            // Randomly select one drug as the correct answer
             const correctDrugIndex = Math.floor(Math.random() * drugs.length);
             correctAnswer = drugs[correctDrugIndex];
 
-            // Get a list of potential wrong answers
             const incorrectAnswers = drugs.filter(drug => drug !== correctAnswer);
             shuffleArray(incorrectAnswers);
 
-            // Create a list of 3 incorrect options and 1 correct option
             const options = [correctAnswer.brand, incorrectAnswers[0].brand, incorrectAnswers[1].brand, incorrectAnswers[2].brand];
             shuffleArray(options);
 
-            // Display the question
             questionBox.textContent = `What is the brand name for ${correctAnswer.generic}?`;
 
-            // Create buttons for each option
             options.forEach(option => {
                 const button = document.createElement('button');
                 button.textContent = option;
@@ -326,6 +352,8 @@
                 button.addEventListener('click', () => checkAnswer(button, option));
                 optionsContainer.appendChild(button);
             });
+            
+            reviewButton.style.display = 'block';
         }
 
         function checkAnswer(selectedButton, selectedOption) {
@@ -343,17 +371,43 @@
             });
 
             if (selectedOption === correctAnswer.brand) {
-                score++;
+                correctCount++;
                 feedbackMessage.textContent = "Correct! ✅";
             } else {
+                incorrectCount++;
+                missedDrugs.push(correctAnswer);
                 feedbackMessage.textContent = "Incorrect. ❌ The correct answer was: " + correctAnswer.brand;
             }
 
-            scoreDisplay.textContent = "Score: " + score;
+            scoreDisplay.textContent = `Correct: ${correctCount} | Incorrect: ${incorrectCount}`;
             nextButton.style.display = 'block';
         }
 
+        function showMissedQuestions() {
+            quizContainer.style.display = 'none';
+            reviewContainer.style.display = 'block';
+            missedList.innerHTML = '';
+
+            if (missedDrugs.length === 0) {
+                missedList.innerHTML = '<p>You haven\'t missed any questions yet. Keep up the good work!</p>';
+            } else {
+                missedDrugs.forEach(drug => {
+                    const li = document.createElement('li');
+                    li.classList.add('review-list-item');
+                    li.innerHTML = `<strong>${drug.generic}</strong>: ${drug.brand}`;
+                    missedList.appendChild(li);
+                });
+            }
+        }
+        
+        function showQuiz() {
+            quizContainer.style.display = 'block';
+            reviewContainer.style.display = 'none';
+        }
+
         nextButton.addEventListener('click', generateQuizQuestion);
+        reviewButton.addEventListener('click', showMissedQuestions);
+        backToQuizButton.addEventListener('click', showQuiz);
 
         // Initial question generation
         generateQuizQuestion();
